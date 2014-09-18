@@ -24,6 +24,9 @@ class AsciiGenerator(initial:Int = 0, asciiStart:Int = 33, asciiEnd:Int = 126)
 	private var counter:Int = 0;
 	makeAscii() /* Initialize */
 	
+	/**
+	 * Creates an Ascii representation of initial.
+	 */
 	private def makeAscii(): String =
 	{
 	  var temp = initial
@@ -46,16 +49,20 @@ class AsciiGenerator(initial:Int = 0, asciiStart:Int = 33, asciiEnd:Int = 126)
 	  return buff.reverse().toString()
 	}
 	
+	/**
+	 * Moves on to the next Ascii character by incrementing counter by one and
+	 * finding the Ascii representation of initial+coutner. This method 
+	 * attempts to change as little as possible in buff instead of simply 
+	 * re-computing the entire string. This method treats buff as a counter and
+	 * thus stops once the next characters fails to "carry over" 
+	 * 
+	 * @return	returns the next Ascii string
+	 */
 	def nextString():String = 
 	{
 	  buff.reverse() /* put buffer back in "reverse" order */
 	  counter += 1
 	  var temp = initial + counter
-	  
-	  /* Check to ensure that the buffer size is big enough */
-	  /*
-	  if((Math.log(temp)/Math.log(base) + 1).toInt < buff.length()) 
-	  println((Math.log(temp)/Math.log(base) + 1).toInt + " " + buff.length())*/
 	  
 	  /* Note, the first position always changes */
 	  buff.setCharAt(0, ((temp % base) + asciiStart).asInstanceOf[Char])
@@ -79,5 +86,8 @@ class AsciiGenerator(initial:Int = 0, asciiStart:Int = 33, asciiEnd:Int = 126)
 	  return buff.reverse().toString()
 	}
 	
+	/**
+	 * Returns the string representation of buff
+	 */
 	def getString():String = buff.toString()
 }
