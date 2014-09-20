@@ -15,7 +15,7 @@
  * and creates the string (based on initial) that represents the range of ascii
  * values. Essentially, it treats initial as a base asciiEnd-aciiStart value
  */
-package com.bitcoin
+package com.sha
 
 class AsciiGenerator(initial:Int = 0, asciiStart:Int = 33, asciiEnd:Int = 126)
 {
