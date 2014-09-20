@@ -20,7 +20,11 @@ class SuperMaster(start:Int = 0,
         sender ! Chunk(work, masterChunkSize, workerChunkSize)
         work += masterChunkSize
       }
-    case Initialize => sender ! InitialSetup(leadingZeroes, prefix)
+    case Initialize =>
+      {
+        context.watch(sender)
+        sender ! InitialSetup(leadingZeroes, prefix)
+      }
     case Result(coin, hash) => // implement
     case _ => // Do nothing for now
   }
