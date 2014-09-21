@@ -10,7 +10,7 @@ class Sha256Miner(leadingZeroes:Int, prefix:String) extends Worker(leadingZeroes
 {
   var gen:AsciiGenerator = null
   var checker = new ZeroChecker(leadingZeroes)
-  var hasher = new SHAHasher
+  var hasher = new ShaHasher
   
   def calculate(input:String): Array[Byte] = hasher.hash(prefix + input)
   

@@ -6,7 +6,7 @@ import java.security.MessageDigest
  * SHAHasher will hash some input and provide the SHA-256 hash of the provided
  * input
  */
-class SHAHasher 
+class ShaHasher 
 {
   val sha = MessageDigest.getInstance("SHA-256")
   
