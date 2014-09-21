@@ -9,24 +9,20 @@ import com.bitcoin.Worker
 class Sha256Miner(leadingZeroes:Int, prefix:String) extends Worker(leadingZeroes, prefix)
 {
   var gen:AsciiGenerator = null
+  var checker = new ZeroChecker(leadingZeroes)
+  var hasher = new SHAHasher
   
-  def calculate(input: Array[Byte]): Array[Byte] =
-  {
-    null
-  }
+  def calculate(input:String): Array[Byte] = hasher.hash(prefix + input)
   
-  def nextInput():Array[Byte] =
-  {
-    null
-  }
+  def getInput():String = gen.getString
+  
+  def nextInput():String = gen.nextString
 	
-  def makeInput(input:Long):Array[Byte] =
+  def makeInput(input:Long):String =
   {
-    null
+    gen = new AsciiGenerator(initial = input.toInt)
+    return gen.getString
   }
   
-  def goodCoin(input:Array[Byte]):Boolean =
-  {
-    false
-  }		
+  def goodCoin(input:Array[Byte]):Boolean = checker.checkLeadingZeroes(input)
 }

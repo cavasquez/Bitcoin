@@ -10,5 +10,8 @@ class SHAHasher
 {
   val sha = MessageDigest.getInstance("SHA-256")
   
+  /**
+   * Computes the SHA-256 hash of input
+   */
   def hash(input:String): Array[Byte] = sha.digest(input.getBytes)
 }

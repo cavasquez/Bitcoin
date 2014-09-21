@@ -13,6 +13,9 @@ class ZeroChecker(leadingZeroes:Int = 0)
   /* Validation Logic */
   if(leadingZeroes < 0) throw new IllegalArgumentException("leadingZeroes must be greater than or equal to 0")
   
+  /**
+   * Returns the checker used to compare against any other Array
+   */
   private final def makeChecker(leadingZeroes:Int):Array[Byte] = 
   {
     var byteCount =  Math.ceil((leadingZeroes * ZERO_SIZE).toDouble/BYTE_SIZE.toDouble).toInt
@@ -32,6 +35,10 @@ class ZeroChecker(leadingZeroes:Int = 0)
     return arr
   }
   
+  /**
+   * Checks x against arr to confirm that it has at least a certain number of
+   * leading zeroes
+   */
   def checkLeadingZeroes(x:Array[Byte]):Boolean = 
   {
     var answer = false
