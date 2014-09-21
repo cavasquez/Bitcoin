@@ -71,11 +71,21 @@ object ShaCoin
 	    } text("Sets the goal coin count for the program. Once achieved, the program will terminate." +
 	        " A negative input will result in an infinite goal.")
 	    
-	    opt[Int]('t', "time") action
+	    opt[Long]('t', "time") action
 	    {
-	      (x,c) => c.copy(goal = x)
+	      (x,c) => c.copy(timeLimit = x)
 	    } text("Sets the max running time (in minutes) that the program should run. " +
 	        " A negative input will result in an infinite time limit.")
+	    
+	    opt[Int]('z', "leading-zeroes") action
+	    {
+	      (x,c) => c.copy(leadingZeroes = x)
+	    } validate
+	    {
+	      x =>
+	      if(x >= 0) success
+	      else failure("Option ---leading-zeroes must be greater than or equal to 0")
+	    } text("Sets the number of leading zeroes that will be looked for in the hash of the coin.")
 	  }
       
 	  parser.parse(args, Config()) map

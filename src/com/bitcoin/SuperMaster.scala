@@ -1,6 +1,10 @@
 package com.bitcoin
 
 import akka.actor.Actor
+import akka.actor.Props
+import javax.xml.bind.DatatypeConverter
+import scala.concurrent.duration._
+import akka.actor.PoisonPill
 
 class SuperMaster(start:Int = 0, 
     masterChunkSize:Int = 1000000, 
@@ -8,10 +12,12 @@ class SuperMaster(start:Int = 0,
     leadingZeroes:Int = 5,
     prefix:String = "",
     goal:Int = 10,
-    timeLimit:Int = 60) extends Actor
+    timeLimit:Long = 60) extends Actor
 {
   var work:Int = start
   var found = 0
+  
+  if(timeLimit > 0) context.system.scheduler.scheduleOnce(60 milliseconds)(() => self ! PoisonPill)(context.system.dispatcher)
   
   final override def receive =
   {
@@ -25,7 +31,12 @@ class SuperMaster(start:Int = 0,
         context.watch(sender)
         sender ! InitialSetup(leadingZeroes, prefix)
       }
-    case Result(coin, hash) => // implement
+    case Result(coin, hash) =>
+      {
+        println("Coin found: " +  (new String(coin), "UTF-8") +  " " +
+            DatatypeConverter.printHexBinary(hash))
+        found += 1
+      }
     case _ => // Do nothing for now
   }
 }

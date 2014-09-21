@@ -13,4 +13,5 @@ case class Config(
     chunkSize:Int = 100000,
     workerLoad:Int = 1000,
     goal:Int = 300,
-    timeLimit:Int = 60)
+    timeLimit:Long = 60,
+    leadingZeroes:Int = 5)
