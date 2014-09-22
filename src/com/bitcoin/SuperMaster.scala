@@ -17,7 +17,7 @@ class SuperMaster(start:Int = 0,
   var work:Int = start
   var found = 0
   
-  if(timeLimit > 0) context.system.scheduler.scheduleOnce(60 milliseconds)(() => self ! PoisonPill)(context.system.dispatcher)
+  if(timeLimit >= 0) context.system.scheduler.scheduleOnce(FiniteDuration.apply(timeLimit, "minute"))(() => self ! PoisonPill)(context.system.dispatcher)
   
   final override def receive =
   {
