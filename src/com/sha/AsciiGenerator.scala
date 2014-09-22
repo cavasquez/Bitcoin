@@ -77,7 +77,7 @@ class AsciiGenerator(initial:Int = 0, asciiStart:Int = 33, asciiEnd:Int = 126)
 	    temp = temp/base - 1
 	  }
 	  
-	  /* Fix the last possible change (i is less than buff.length. If this 
+	  /* Fix the last possible change (i is less than buff.length). If this 
 	   * happens, it must be the case that there is a new character and that
 	   * character must be asciiStart. Remember to fix i (which was incremented
 	   * in the last pass) */
