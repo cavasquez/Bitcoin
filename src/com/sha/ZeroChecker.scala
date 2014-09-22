@@ -14,7 +14,10 @@ class ZeroChecker(leadingZeroes:Int = 0)
   if(leadingZeroes < 0) throw new IllegalArgumentException("leadingZeroes must be greater than or equal to 0")
   
   /**
-   * Returns the checker used to compare against any other Array
+   * Returns the checker used to compare against any other Array.
+   * @param	leadingZeroes	the expected number of leading zeroes to be looked 
+   * 						for
+   * @return				the byte array of zeroes being looked for
    */
   private final def makeChecker(leadingZeroes:Int):Array[Byte] = 
   {
@@ -38,6 +41,8 @@ class ZeroChecker(leadingZeroes:Int = 0)
   /**
    * Checks x against arr to confirm that it has at least a certain number of
    * leading zeroes
+   * @param	x	the array being compared against
+   * @return	whether or not x has the expected number of leading zeroes
    */
   def checkLeadingZeroes(x:Array[Byte]):Boolean = 
   {

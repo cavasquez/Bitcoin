@@ -4,7 +4,10 @@ import com.bitcoin.Worker
 
 /**
  * A Worker that will look for SHA-256 hashes that have the provided leading 
- * zeroes
+ * zeroes. Sha256Miner will provide support for its methods using:
+ * com.sha.AsciiGenerator
+ * com.sha.ZeroChecker
+ * com.sha.ShaHasher
  */
 class Sha256Miner(leadingZeroes:Int, prefix:String) extends Worker(leadingZeroes, prefix)
 {

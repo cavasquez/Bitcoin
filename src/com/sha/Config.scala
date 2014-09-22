@@ -1,7 +1,8 @@
 package com.sha
 
 /**
- * Config class to be used with scopt library in ShaCoin
+ * Config class to be used with the scopt library in ShaCoin in order to 
+ * provide all the config parameters for ShaCoin.
  */
 case class Config(
     masterLocation:String = "localhost",

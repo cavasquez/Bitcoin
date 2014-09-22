@@ -26,6 +26,7 @@ class AsciiGenerator(initial:Int = 0, asciiStart:Int = 33, asciiEnd:Int = 126)
 	
 	/**
 	 * Creates an Ascii representation of initial.
+	 * @return	returns the Ascii representation of initial
 	 */
 	private def makeAscii(): String =
 	{
@@ -88,6 +89,7 @@ class AsciiGenerator(initial:Int = 0, asciiStart:Int = 33, asciiEnd:Int = 126)
 	
 	/**
 	 * Returns the string representation of buff
+	 * @return	returns the string representation of the current string
 	 */
 	def getString():String = buff.toString()
 }

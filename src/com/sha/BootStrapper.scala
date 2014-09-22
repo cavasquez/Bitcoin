@@ -8,6 +8,10 @@ import com.bitcoin.Master
  */
 object BootStrapper
 {
+  /**
+   * Starts the program according to the provided configuration
+   * @param config	The expected configuration with which to run this program
+   */
   def start(config:Config):Unit =
   {
     var sm:SuperMaster = null

@@ -2,10 +2,20 @@ package com.sha
 
 import scopt.OptionParser
 
+/**
+ * ShaCoin will act as the Command Line driver for this program
+ */
 object ShaCoin
 {
+	/**
+	 * The main program
+	 * @param args	the arguments that will be passed to ShaCoin
+	 */
     def main(args:Array[String])
     {
+      /**
+       * Define the parser
+       */
       val parser:OptionParser[Config] = new OptionParser[Config]("ShaCoin")
 	  {
 	    head("ShaCoin", "1.0")
@@ -88,6 +98,10 @@ object ShaCoin
 	    } text("Sets the number of leading zeroes that will be looked for in the hash of the coin.")
 	  }
       
+      /**
+       * Validate thea arguments and then perform the primary program via 
+       * BootStrapper
+       */
 	  parser.parse(args, Config()) map
 	  {
 	    /* Options are good, continue */

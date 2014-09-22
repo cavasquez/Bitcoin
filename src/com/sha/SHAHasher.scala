@@ -12,6 +12,8 @@ class ShaHasher
   
   /**
    * Computes the SHA-256 hash of input
+   * @param input	the string that will be hashed using SHA-256
+   * @return		the SHA-256 hash of input
    */
   def hash(input:String): Array[Byte] = sha.digest(input.getBytes)
 }
