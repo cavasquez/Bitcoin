@@ -12,9 +12,9 @@ import akka.routing.SmallestMailboxPool
  * from the SuperMaster. This relationship is similar to a server-client 
  * relationship where the Master is a client and the SuperMaster is the server.
  */
-class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().availableProcessors()) extends Actor
+class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().availableProcessors(), path:String) extends Actor
 {
-  val superMaster = context.actorSelection("akka.tcp://")
+  val superMaster = context.actorSelection(path)
   var workers:ActorRef = null
   var workLeft = 0
   
