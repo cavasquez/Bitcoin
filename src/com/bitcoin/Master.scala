@@ -6,6 +6,12 @@ import akka.actor.Props
 import scala.reflect.ClassTag
 import akka.routing.SmallestMailboxPool
 
+/**
+ * Master will delegate work to the Worker on behalf of the SuperMaster and 
+ * communicate to the SuperMaster any results. It will also request more work
+ * from the SuperMaster. This relationship is similar to a server-client 
+ * relationship where the Master is a client and the SuperMaster is the server.
+ */
 class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().availableProcessors()) extends Actor
 {
   val superMaster = context.actorSelection("akka.tcp://")
@@ -23,6 +29,13 @@ class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().ava
     case _ => // Do nothing for now
   }
   
+  /**
+   * Does the partitionSize amount of work with start as a seed. The work will 
+   * be split into intervals that will be given to the workers.
+   * @param	start			the "seed" at which computation will start
+   * @param interval		the amount of work each Worker will perform	
+   * @param partitionSize	the amount of work the Master will perform
+   */
   def work(start:Long, interval:Int, partitionSize:Int): Unit =
   {
     workLeft = interval/partitionSize
