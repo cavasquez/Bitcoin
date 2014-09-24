@@ -10,6 +10,7 @@ import akka.actor.Props
  */
 object BootStrapper extends App
 {
+  val constant:String = "constant"
   private var sm:SuperMaster = null
   private var master:Master[Sha256Miner] = null
   private var sys:ActorSystem = null

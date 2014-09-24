@@ -12,7 +12,7 @@ import akka.routing.SmallestMailboxPool
  * from the SuperMaster. This relationship is similar to a server-client 
  * relationship where the Master is a client and the SuperMaster is the server.
  */
-class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().availableProcessors(), path:String) extends Actor
+class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().availableProcessors(), path:String) extends BitcoinActor
 {
   val superMaster = context.actorSelection(path)
   var workers:ActorRef = null
@@ -20,12 +20,27 @@ class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().ava
   
   final override def receive =
   {
-    case Chunk(start, interval, partitionSize) => work(start, interval, partitionSize)
-    case Result(coin, hash) => superMaster ! Result(coin, hash)
-    case WorkDone => if(workLeft <= 0) superMaster ! Ready
+    case Chunk(start, interval, partitionSize) =>
+      {
+        log.debug(s"[{}] received Chunk($start, $interval, $partitionSize) from [{}]", self.path, sender.path)
+        work(start, interval, partitionSize)
+      }
+    case Result(coin, hash) =>
+      {
+        log.debug(s"[{}] received Result($coin, $hash) from [{}]", self.path, sender.path)
+        superMaster ! Result(coin, hash)
+      }
+    case WorkDone => 
+      {
+        log.debug(s"[{}] received WorkDone from [{}]. Work remaining: $workLeft", self.path, sender.path)
+        if(workLeft <= 0) superMaster ! Ready
+      }
     case InitialSetup(leadingZeroes, prefix) => 
-      workers = context.actorOf(Props(classOf[ClassTag[T]], leadingZeroes, prefix).withRouter(SmallestMailboxPool(workerCount)), name = "workerRouter")
+      {
+        log.debug(s"[{}] received InitialSetup($leadingZeroes, $prefix) from [{}].", self.path, sender.path)
+        workers = context.actorOf(Props(classOf[ClassTag[T]], leadingZeroes, prefix).withRouter(SmallestMailboxPool(workerCount)), name = "workerRouter")
       //workers = context.actorOf(Props[T].withRouter(SmallestMailboxPool(workerCount)), name = "workerRouter")
+      }
     case _ => // Do nothing for now
   }
   

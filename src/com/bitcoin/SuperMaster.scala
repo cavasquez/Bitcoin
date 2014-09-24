@@ -16,7 +16,7 @@ class SuperMaster(start:Int = 0,
     leadingZeroes:Int = 5,
     prefix:String = "",
     goal:Int = 10,
-    timeLimit:Long = 60) extends Actor
+    timeLimit:Long = 60) extends BitcoinActor
 {
   var work:Int = start
   var found = 0
@@ -29,17 +29,25 @@ class SuperMaster(start:Int = 0,
   {
     case Ready => 
       {
+        log.debug(s"[{}] received Ready from [{}]. Sent chunk $work", self.path, sender.path)
         sender ! Chunk(work, masterChunkSize, workerChunkSize)
         work += masterChunkSize
       }
     case Initialize =>
       {
+        /* "Register" new master */
+        log.debug("[{}] received Initialize from [{}]", self.path, sender.path)
         context.watch(sender)
         sender ! InitialSetup(leadingZeroes, prefix)
       }
     case Result(coin, hash) =>
       {
-        println("Coin found: " +  (new String(coin), "UTF-8") +  " " +
+        log.info("[{}] received Result([{}] [{}]) from [{}]", (self.path,
+            new String(coin), "UTF-8"),
+            DatatypeConverter.printHexBinary(hash),
+            sender.path)
+            
+        println("Coin found: [{}] [{}]", (new String(coin), "UTF-8"),
             DatatypeConverter.printHexBinary(hash))
         found += 1
       }

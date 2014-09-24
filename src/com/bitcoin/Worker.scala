@@ -7,14 +7,18 @@ import akka.actor.ActorRef
  * Worker will perform the computation provided by Master and report any 
  * results
  */
-abstract class Worker(leadingZeroes:Int = 0, prefix:String = "") extends Actor
+abstract class Worker(leadingZeroes:Int = 0, prefix:String = "") extends BitcoinActor
 {
   /**
    * The receive method will receive a Message and deal with it.
    */
 	override def receive =
 	{
-	  	case Work(start, interval) => work(start, interval, sender)
+	  	case Work(start, interval) =>
+	  	  {
+	  	    log.debug(s"[{}] received work: start at $start and work $interval iterations", self.path)
+	  	    work(start, interval, sender)
+	  	  }
 	  	case _ => // Do nothing for now
 	}
 	
