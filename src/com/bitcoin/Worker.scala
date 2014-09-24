@@ -2,6 +2,7 @@ package com.bitcoin
 
 import akka.actor.Actor
 import akka.actor.ActorRef
+import javax.xml.bind.DatatypeConverter
 
 /**
  * Worker will perform the computation provided by Master and report any 
@@ -72,7 +73,11 @@ abstract class Worker(leadingZeroes:Int = 0, prefix:String = "") extends Bitcoin
 	  for(i <- 0 until interval)
 	  {
 	    hash = calculate(coin)
-	    if(goodCoin(hash)) master ! Result(coin.getBytes(), hash)
+	    if(goodCoin(hash))
+	    {
+	      log.debug(s"[{}] found coin: $coin with hash: [{}]", self.path, DatatypeConverter.printHexBinary(hash))
+	      master ! Result(coin.getBytes(), hash)
+	    }
 	    coin = nextInput
 	  }
 	  master ! WorkDone
