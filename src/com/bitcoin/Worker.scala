@@ -3,12 +3,13 @@ package com.bitcoin
 import akka.actor.Actor
 import akka.actor.ActorRef
 import javax.xml.bind.DatatypeConverter
+import akka.actor.IndirectActorProducer
 
 /**
  * Worker will perform the computation provided by Master and report any 
  * results
  */
-abstract class Worker(leadingZeroes:Int = 0, prefix:String = "") extends BitcoinActor
+abstract class Worker(leadingZeroes:Int = 0, prefix:String = "") extends  BitcoinActor with IndirectActorProducer
 {
   /**
    * The receive method will receive a Message and deal with it.

@@ -5,7 +5,7 @@ package com.sha
  * provide all the config parameters for ShaCoin.
  */
 case class Config(
-    masterLocation:String = "localhost",
+    masterLocation:String = "localhost:6677",
     superMaster:Boolean = true,
     debug:Boolean = false,
     log:Boolean = true,

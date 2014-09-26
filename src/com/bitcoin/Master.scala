@@ -5,6 +5,7 @@ import akka.actor.Actor
 import akka.actor.Props
 import scala.reflect.ClassTag
 import akka.routing.SmallestMailboxPool
+import akka.actor.IndirectActorProducer
 
 /**
  * Master will delegate work to the Worker on behalf of the SuperMaster and 
@@ -22,22 +23,22 @@ class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().ava
   {
     case Chunk(start, interval, partitionSize) =>
       {
-        log.debug(s"[{}] received Chunk($start, $interval, $partitionSize) from [{}]", self.path, sender.path)
+        log.debug(s"%s received Chunk($start, $interval, $partitionSize) from %s".format(self.path, sender.path))
         work(start, interval, partitionSize)
       }
     case Result(coin, hash) =>
       {
-        log.debug(s"[{}] received Result($coin, $hash) from [{}]", self.path, sender.path)
+        log.debug(s"%s received Result($coin, $hash) from %s".format(self.path, sender.path))
         superMaster ! Result(coin, hash)
       }
     case WorkDone => 
       {
-        log.debug(s"[{}] received WorkDone from [{}]. Work remaining: $workLeft", self.path, sender.path)
+        log.debug(s"%s received WorkDone from %s. Work remaining: $workLeft".format(self.path, sender.path))
         if(workLeft <= 0) superMaster ! Ready
       }
     case InitialSetup(leadingZeroes, prefix) => 
       {
-        log.debug(s"[{}] received InitialSetup($leadingZeroes, $prefix) from [{}].", self.path, sender.path)
+        log.debug(s"%s received InitialSetup($leadingZeroes, $prefix) from %s.".format(self.path, sender.path))
         workers = context.actorOf(Props(classOf[ClassTag[T]], leadingZeroes, prefix).withRouter(SmallestMailboxPool(workerCount)), name = "workerRouter")
       //workers = context.actorOf(Props[T].withRouter(SmallestMailboxPool(workerCount)), name = "workerRouter")
       }

@@ -5,6 +5,7 @@ import akka.actor.Props
 import javax.xml.bind.DatatypeConverter
 import scala.concurrent.duration._
 import akka.actor.PoisonPill
+import akka.actor.IndirectActorProducer
 
 /**
  * The SuperMaster will spawn its own Master and then be connected to by other
@@ -29,25 +30,25 @@ class SuperMaster(start:Int = 0,
   {
     case Ready => 
       {
-        log.debug(s"[{}] received Ready from [{}]. Sent chunk $work", self.path, sender.path)
+        log.debug(s"%s received Ready from %s. Sent chunk $work".format(self.path, sender.path))
         sender ! Chunk(work, masterChunkSize, workerChunkSize)
         work += masterChunkSize
       }
     case Initialize =>
       {
         /* "Register" new master */
-        log.debug("[{}] received Initialize from [{}]", self.path, sender.path)
+        log.debug("%s received Initialize from %s".format( self.path, sender.path))
         context.watch(sender)
         sender ! InitialSetup(leadingZeroes, prefix)
       }
     case Result(coin, hash) =>
       {
-        log.info("[{}] received Result([{}] [{}]) from [{}]", (self.path,
+        log.info("%s received Result(%s, %s) from %s".format(self.path,
             new String(coin), "UTF-8"),
             DatatypeConverter.printHexBinary(hash),
             sender.path)
             
-        println("Coin found: [{}] [{}]", (new String(coin), "UTF-8"),
+        println("Coin found: %s, %s".format(new String(coin), "UTF-8"),
             DatatypeConverter.printHexBinary(hash))
         found += 1
       }

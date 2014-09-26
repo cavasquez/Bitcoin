@@ -12,13 +12,13 @@ abstract class BitcoinActor extends Actor
   
   override def preStart():Unit =
   {
-    log.debug("[{}] is starting", self.path)
+    log.debug("%s is starting".format(self.path))
   }
   
   override def preRestart(reason:Throwable, message:Option[Any]):Unit =
   {
-    log.error(reason, "Restarting due to [{}] when processing [{}]", 
-        reason.getMessage(), message.getOrElse(""))
+    log.error(reason, "Restarting due to %s when processing %s".format( 
+        reason.getMessage(), message.getOrElse("")))
     
   }
   
@@ -29,7 +29,7 @@ abstract class BitcoinActor extends Actor
   
   override def postStop() = 
   {
-    log.debug("[{}] is stopping", self.path)
+    log.debug("%s is stopping".format(self.path))
   }
   
 }

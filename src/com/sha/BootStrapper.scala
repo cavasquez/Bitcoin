@@ -37,6 +37,6 @@ object BootStrapper extends App
     }
     
     /* Spin up the masters */
-    master = new Master(path = "akka.tcp://bitcoinsystem@" + config.masterLocation + "/user/super")
+    master = new Master(path = s"akka.tcp://bitcoinsystem@$config.masterlocation" + config.masterLocation + "/user/super")
   }
 }
