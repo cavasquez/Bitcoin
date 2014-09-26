@@ -19,6 +19,9 @@ class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().ava
   var workers:ActorRef = null
   var workLeft = 0
   
+  /* Send SuperMaster Initialize message */
+  superMaster ! Initialize
+  
   final override def receive =
   {
     case Chunk(start, interval, partitionSize) =>

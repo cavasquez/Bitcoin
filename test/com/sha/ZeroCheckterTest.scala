@@ -4,6 +4,7 @@ import org.scalatest.junit.AssertionsForJUnit
 import org.junit.Assert._
 import org.junit.Test
 import org.junit.Before
+import com.sha.ZeroChecker
 
 class ZeroCheckterTest extends AssertionsForJUnit 
 {

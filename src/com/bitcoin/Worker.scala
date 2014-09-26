@@ -9,7 +9,7 @@ import akka.actor.IndirectActorProducer
  * Worker will perform the computation provided by Master and report any 
  * results
  */
-abstract class Worker(leadingZeroes:Int = 0, prefix:String = "") extends  BitcoinActor with IndirectActorProducer
+abstract class Worker(leadingZeroes:Int = 0, prefix:String = "") extends  BitcoinActor
 {
   /**
    * The receive method will receive a Message and deal with it.

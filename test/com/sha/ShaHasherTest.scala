@@ -5,6 +5,7 @@ import org.junit.Assert._
 import org.junit.Test
 import org.junit.Before
 import javax.xml.bind.DatatypeConverter
+import com.sha.ShaHasher
 
 /**
  * Tests com.bitcoin.ShaHasher

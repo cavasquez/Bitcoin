@@ -1,7 +1,6 @@
 package com.sha
 
 import com.bitcoin.Worker
-import akka.actor.Actor
 
 /**
  * A Worker that will look for SHA-256 hashes that have the provided leading 
@@ -29,9 +28,4 @@ class Sha256Miner(leadingZeroes:Int, prefix:String) extends Worker(leadingZeroes
   }
   
   def goodCoin(input:Array[Byte]):Boolean = checker.checkLeadingZeroes(input)
-  
-  /* IndirectActorProducer methods */
-  override def actorClass = classOf[Actor]
-  
-  override def produce = new Sha256Miner(leadingZeroes, prefix)
 }
