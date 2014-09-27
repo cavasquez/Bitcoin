@@ -65,6 +65,7 @@ class Server(test1:String = "test1", test2:String = "test2") extends Actor
   {
     case "hey" => println("got hey from %s".format(sender))
     case Identify => println("Identifying %s".format(sender.path))
+    case _ => println("got something from %s".format(sender))
   }
 }
 
