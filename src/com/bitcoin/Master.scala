@@ -7,6 +7,7 @@ import scala.reflect.ClassTag
 import akka.routing.SmallestMailboxPool
 import akka.actor.IndirectActorProducer
 import akka.actor.ActorSelection
+import javax.xml.bind.DatatypeConverter
 
 /**
  * Master will delegate work to the Worker on behalf of the SuperMaster and 
@@ -38,7 +39,10 @@ class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().ava
       }
     case Result(coin, hash) =>
       {
-        log.debug(s"%s received Result($coin, $hash) from %s".format(self.path, sender.path))
+        log.info("%s received Result(%s, %s) from %s".format(self.path,
+            new String(coin, "UTF-8"),
+            DatatypeConverter.printHexBinary(hash),
+            sender.path))
         superMaster ! Result(coin, hash)
       }
     case WorkDone => 

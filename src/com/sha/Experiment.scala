@@ -22,7 +22,7 @@ object Experiment
 	    superMaster = true,
 	    debug = false,
 	    log = true,
-	    prefix = "",
+	    prefix = "test",
 	    initialInput = 0,
 	    chunkSize = 100000,
 	    workerLoad = 1000,

@@ -18,7 +18,7 @@ abstract class Worker(leadingZeroes:Int = 0, prefix:String = "") extends  Bitcoi
 	{
 	  	case Work(start, interval) =>
 	  	  {
-	  	    log.debug(s"[{}] received work: start at $start and work $interval iterations", self.path)
+	  	    log.debug(s"%s received work: start at $start and work $interval iterations".format(self.path))
 	  	    work(start, interval, sender)
 	  	  }
 	  	case _ => // Do nothing for now
@@ -76,7 +76,7 @@ abstract class Worker(leadingZeroes:Int = 0, prefix:String = "") extends  Bitcoi
 	    hash = calculate(coin)
 	    if(goodCoin(hash))
 	    {
-	      log.debug(s"[{}] found coin: $coin with hash: [{}]", self.path, DatatypeConverter.printHexBinary(hash))
+	      log.debug("%s found coin: %s with hash: %s".format(self.path, coin, DatatypeConverter.printHexBinary(hash)))
 	      master ! Result(coin.getBytes(), hash)
 	    }
 	    coin = nextInput

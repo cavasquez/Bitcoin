@@ -51,8 +51,8 @@ class SuperMaster(start:Int = 0,
             DatatypeConverter.printHexBinary(hash),
             sender.path))
             
-        println("Coin found: %s, %s".format(new String(coin), "UTF-8"),
-            DatatypeConverter.printHexBinary(hash))
+        println("Coin found: %s, %s".format(new String(coin, "UTF-8"),
+            DatatypeConverter.printHexBinary(hash)))
         found += 1
       }
     case _ => // Do nothing for now

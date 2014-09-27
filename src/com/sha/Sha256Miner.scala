@@ -15,16 +15,16 @@ class Sha256Miner(leadingZeroes:Int, prefix:String) extends Worker(leadingZeroes
   var checker = new ZeroChecker(leadingZeroes)
   var hasher = new ShaHasher
   
-  def calculate(input:String): Array[Byte] = hasher.hash(prefix + input)
+  def calculate(input:String): Array[Byte] = hasher.hash(input)
   
-  def getInput():String = gen.getString
+  def getInput():String = prefix + gen.getString
   
-  def nextInput():String = gen.nextString
+  def nextInput():String = prefix + gen.nextString
 	
   def makeInput(input:Long):String =
   {
     gen = new AsciiGenerator(initial = input.toInt)
-    return gen.getString
+    return (prefix + gen.getString)
   }
   
   def goodCoin(input:Array[Byte]):Boolean = checker.checkLeadingZeroes(input)
