@@ -8,6 +8,9 @@ import akka.actor.Identify
 import com.typesafe.config.ConfigFactory
 import com.bitcoin.Master
 import scala.reflect.ClassTag
+import scala.concurrent.duration.{FiniteDuration, Duration}
+import akka.actor.Scheduler
+import java.util.concurrent.TimeUnit
 
 object Experiment 
 {
@@ -26,8 +29,8 @@ object Experiment
 	    initialInput = 0,
 	    chunkSize = 100000,
 	    workerLoad = 1000,
-	    goal = 300,
-	    timeLimit = 60,
+	    goal = 10,
+	    timeLimit = 1,
 	    leadingZeroes= 5)
 	    
 	    BootStrapper.start(config)
@@ -66,12 +69,6 @@ object Experiment
 	  val client = sys.actorOf(Props[Client], name = "client")
 	  client ! Identify
 	  
-	  val workerCount = Runtime.getRuntime().availableProcessors()
-      val path = "akka.tcp://testsystem@localhost:6677/user/server"
-      val ct = ClassTag(classOf[Sha256Miner])
-      println(classOf[Master[Sha256Miner]].getConstructors()(0).toString())
-	  val test = sys.actorOf(Props(classOf[Master[Sha256Miner]], workerCount, path, ct), name = "master")
-	  test ! Identify
 	}
 }
 
@@ -94,12 +91,20 @@ class Server(test1:String = "test1", test2:String = "test2") extends Actor
 class Client() extends Actor
 {
   override def preStart = 
-  {
-    
+  {/*
+    context.system.scheduler.schedule(
+        Duration.create(500, TimeUnit.MILLISECONDS),
+        self,
+        "time",
+        context.dispatcher,
+        null)*/
+    context.system.scheduler.scheduleOnce(FiniteDuration.apply(5, "second"))(() => self ! "time")(context.system.dispatcher)
+    //if(timeLimit >= 0) context.system.scheduler.scheduleOnce(FiniteDuration.apply(timeLimit, "minute"))(() => self ! PoisonPill)(context.system.dispatcher)
   }
   
   def receive = 
   {
+    case "time" => println("got time message")
     case _ =>
       val remote = context.actorSelection("akka.tcp://testsystem@localhost:6677/user/server")
       println("client got path %s".format(remote.pathString))

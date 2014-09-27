@@ -39,10 +39,7 @@ class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().ava
       }
     case Result(coin, hash) =>
       {
-        log.info("%s received Result(%s, %s) from %s".format(self.path,
-            new String(coin, "UTF-8"),
-            DatatypeConverter.printHexBinary(hash),
-            sender.path))
+        log.info("%s received Result(%s, %s) from %s".format(self.path, coin, hash, sender.path))
         superMaster ! Result(coin, hash)
       }
     case WorkDone => 

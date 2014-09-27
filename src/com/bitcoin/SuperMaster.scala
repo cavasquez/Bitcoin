@@ -46,14 +46,11 @@ class SuperMaster(start:Int = 0,
       }
     case Result(coin, hash) =>
       {
-        log.info("%s received Result(%s, %s) from %s".format(self.path,
-            new String(coin, "UTF-8"),
-            DatatypeConverter.printHexBinary(hash),
-            sender.path))
-            
-        println("Coin found: %s, %s".format(new String(coin, "UTF-8"),
-            DatatypeConverter.printHexBinary(hash)))
         found += 1
+        log.info("%s received Result(%s, %s) from %s".format(self.path, coin, hash, sender.path))
+        //println(s"Coin found: $scoin, $shash. Remaining: %s".format((goal - found).toString))
+        println("Coin found: %s, %s. Remaining: %s".format(coin, hash, (goal - found).toString))
+        if(found == (goal - 1)) context.system.shutdown
       }
     case _ => // Do nothing for now
   }

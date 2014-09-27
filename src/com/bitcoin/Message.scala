@@ -27,7 +27,7 @@ case class Work(start: Long, interval: Int) extends Message
  * Message sent by the Worker to the Master or the Master to the SuperMaster
  * telling the receiver about a found coin
  */
-case class Result(coin: Array[Byte], hash: Array[Byte]) extends Message
+case class Result(coin:String, hash:String) extends Message
 
 /**
  * Message sent by the SuperMaster to the Master communicating the settings it

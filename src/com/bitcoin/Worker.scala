@@ -77,7 +77,7 @@ abstract class Worker(leadingZeroes:Int = 0, prefix:String = "") extends  Bitcoi
 	    if(goodCoin(hash) == true)
 	    {
 	      log.debug("%s found coin: %s with hash: %s".format(self.path, coin, DatatypeConverter.printHexBinary(hash)))
-	      master ! Result(coin.getBytes(), hash)
+	      master ! Result(coin, DatatypeConverter.printHexBinary(hash))
 	    }
 	    coin = nextInput
 	  }
