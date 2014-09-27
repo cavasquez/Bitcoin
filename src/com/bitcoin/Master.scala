@@ -49,6 +49,7 @@ class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().ava
       {
         log.debug(s"%s received WorkDone from %s. Work remaining: $workLeft".format(self.path, sender.path))
         if(workLeft <= 0) superMaster ! Ready
+        else workLeft -= 1
       }
     case InitialSetup(leadingZeroes, prefix) => 
       {
