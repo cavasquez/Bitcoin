@@ -51,6 +51,7 @@ class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().ava
         log.debug(s"%s received InitialSetup($leadingZeroes, $prefix) from %s.".format(self.path, sender.path))
         log.debug("%s creating %s".format(self.path, m.runtimeClass))
         workers = context.actorOf(Props(m.runtimeClass, leadingZeroes, prefix).withRouter(SmallestMailboxPool(workerCount)), name = "workerRouter")
+        superMaster ! Ready
       }
     case _ => // Do nothing for now
   }

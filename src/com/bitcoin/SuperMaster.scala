@@ -47,9 +47,9 @@ class SuperMaster(start:Int = 0,
     case Result(coin, hash) =>
       {
         log.info("%s received Result(%s, %s) from %s".format(self.path,
-            new String(coin), "UTF-8"),
+            new String(coin, "UTF-8"),
             DatatypeConverter.printHexBinary(hash),
-            sender.path)
+            sender.path))
             
         println("Coin found: %s, %s".format(new String(coin), "UTF-8"),
             DatatypeConverter.printHexBinary(hash))
