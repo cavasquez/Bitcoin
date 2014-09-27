@@ -4,7 +4,6 @@ import org.scalatest.junit.AssertionsForJUnit
 import org.junit.Assert._
 import org.junit.Test
 import org.junit.Before
-import com.sha.ZeroChecker
 
 class ZeroCheckterTest extends AssertionsForJUnit 
 {
@@ -55,5 +54,11 @@ class ZeroCheckterTest extends AssertionsForJUnit
     testee(1) = 0x00.toByte
     
     assertFalse(test.checkLeadingZeroes(testee))
+    
+    var tester = "00000AFG"
+    assertTrue(test.checkLeadingZeroes(tester))
+    
+    tester = "00AFG"
+    assertFalse(test.checkLeadingZeroes(tester))
   }
 }

@@ -1,6 +1,7 @@
 package com.sha
 
 import com.bitcoin.Worker
+import javax.xml.bind.DatatypeConverter
 
 /**
  * A Worker that will look for SHA-256 hashes that have the provided leading 
@@ -27,5 +28,5 @@ class Sha256Miner(leadingZeroes:Int, prefix:String) extends Worker(leadingZeroes
     return (prefix + gen.getString)
   }
   
-  def goodCoin(input:Array[Byte]):Boolean = checker.checkLeadingZeroes(input)
+  def goodCoin(input:Array[Byte]):Boolean = checker.checkLeadingZeroes(DatatypeConverter.printHexBinary(input))
 }
