@@ -11,7 +11,29 @@ import scala.reflect.ClassTag
 
 object Experiment 
 {
-  def main(args: Array[String])
+  def main(args: Array[String]) =
+  {
+    this.test1
+  }
+  
+  def test1() =
+  {
+    val config = Config(masterLocation = "localhost:6677",
+	    superMaster = true,
+	    debug = false,
+	    log = true,
+	    prefix = "",
+	    initialInput = 0,
+	    chunkSize = 100000,
+	    workerLoad = 1000,
+	    goal = 300,
+	    timeLimit = 60,
+	    leadingZeroes= 5)
+	    
+	    BootStrapper.start(config)
+  }
+  
+  def test2() =
 	{
 	  println("start")
 	  

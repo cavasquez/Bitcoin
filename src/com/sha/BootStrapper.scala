@@ -28,7 +28,6 @@ object BootStrapper extends App
     /* Check to see if this is the SuperMaster. If so, spin up the SuperMaster */
     if(config.superMaster == true)
     {
-      println("let's do this")
       sys.actorOf(Props(classOf[SuperMaster],
           config.initialInput,
           config.chunkSize,
@@ -44,6 +43,10 @@ object BootStrapper extends App
     val workerCount = Runtime.getRuntime().availableProcessors()
     val path = "akka.tcp://bitcoinsystem@%s/user/super".format(config.masterLocation )
     val ct = ClassTag(classOf[Sha256Miner])
-    master = sys.actorOf(Props(classOf[Master[Sha256Miner]], workerCount, path, ct), name = "master")
+    val m = manifest[Sha256Miner]
+    //println(classOf[Master[Sha256Miner]].getConstructor(classOf[Sha256Miner]))
+    println(classOf[Master[Sha256Miner]].getConstructors()(0))
+    master = sys.actorOf(Props(classOf[Master[Sha256Miner]], workerCount, path, ct, m), name = "master")
+    println("done")
   }
 }

@@ -6,6 +6,7 @@ import akka.actor.Props
 import scala.reflect.ClassTag
 import akka.routing.SmallestMailboxPool
 import akka.actor.IndirectActorProducer
+import akka.actor.ActorSelection
 
 /**
  * Master will delegate work to the Worker on behalf of the SuperMaster and 
@@ -13,16 +14,19 @@ import akka.actor.IndirectActorProducer
  * from the SuperMaster. This relationship is similar to a server-client 
  * relationship where the Master is a client and the SuperMaster is the server.
  */
-class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().availableProcessors(), path:String) extends BitcoinActor
+class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().availableProcessors(), path:String)(implicit m: Manifest[T]) extends BitcoinActor
 {
-  val superMaster = context.actorSelection(path)
+  var superMaster:ActorSelection = null
   var workers:ActorRef = null
   var workLeft = 0
   
   override def preStart = 
   {
+    superMaster = context.actorSelection(path)
+    
     /* Send SuperMaster Initialize message */
     superMaster ! Initialize
+    log.debug("sent %s InitialiZe".format(superMaster.pathString))
   }
   
   final override def receive =
@@ -45,8 +49,8 @@ class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().ava
     case InitialSetup(leadingZeroes, prefix) => 
       {
         log.debug(s"%s received InitialSetup($leadingZeroes, $prefix) from %s.".format(self.path, sender.path))
-        workers = context.actorOf(Props(classOf[ClassTag[T]], leadingZeroes, prefix).withRouter(SmallestMailboxPool(workerCount)), name = "workerRouter")
-      //workers = context.actorOf(Props[T].withRouter(SmallestMailboxPool(workerCount)), name = "workerRouter")
+        log.debug("%s creating %s".format(self.path, m.runtimeClass))
+        workers = context.actorOf(Props(m.runtimeClass, leadingZeroes, prefix).withRouter(SmallestMailboxPool(workerCount)), name = "workerRouter")
       }
     case _ => // Do nothing for now
   }
