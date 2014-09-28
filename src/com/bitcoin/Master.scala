@@ -14,12 +14,18 @@ import javax.xml.bind.DatatypeConverter
  * communicate to the SuperMaster any results. It will also request more work
  * from the SuperMaster. This relationship is similar to a server-client 
  * relationship where the Master is a client and the SuperMaster is the server.
+ * 
+ * Note that the Master will not wait until workLeft reaches 0 to request more 
+ * work. Master will check to see if the work left is less than or equal to the
+ * number of workers left times the workCoefficient in order to request more 
+ * work. This is done to keep the workers busy. 
  */
 class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().availableProcessors(), path:String) extends BitcoinActor
 {
   var superMaster:ActorSelection = null
   var workers:ActorRef = null
   var workLeft = 0
+  val workCoefficient = 5
   
   override def preStart = 
   {
@@ -45,8 +51,8 @@ class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().ava
     case WorkDone => 
       {
         log.debug(s"%s received WorkDone from %s. Work remaining: $workLeft".format(self.path, sender.path))
-        if(workLeft <= 1) superMaster ! Ready // 1 should be the last message received
-        else workLeft -= 1
+        workLeft -= 1
+        if(workLeft <= (workCoefficient * workerCount)) superMaster ! Ready 
       }
     case InitialSetup(leadingZeroes, prefix) => 
       {
@@ -67,7 +73,7 @@ class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().ava
    */
   def work(start:Long, interval:Int, partitionSize:Int): Unit =
   {
-    workLeft = interval/partitionSize
+    workLeft += interval/partitionSize
     for(i <- 0 until (interval/partitionSize)) workers ! Work(start + (i * partitionSize), partitionSize)
   }
 }
