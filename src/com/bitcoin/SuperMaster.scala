@@ -26,7 +26,7 @@ class SuperMaster(start:Int = 0,
   {
     /* Terminates the SuperMaster and any of its dependencies in timeLimit minutes
      * (if timeLimit is not negative) */
-     if(timeLimit >= 0) context.system.scheduler.scheduleOnce(FiniteDuration.apply(timeLimit, "minute"))(() => self ! PoisonPill)(context.system.dispatcher)
+     if(timeLimit >= 0) context.system.scheduler.scheduleOnce(timeLimit.minute)(self ! PoisonPill)(context.system.dispatcher)
   }
   
   final override def receive =

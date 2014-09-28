@@ -8,7 +8,7 @@ import akka.actor.Identify
 import com.typesafe.config.ConfigFactory
 import com.bitcoin.Master
 import scala.reflect.ClassTag
-import scala.concurrent.duration.{FiniteDuration, Duration}
+import scala.concurrent.duration._
 import akka.actor.Scheduler
 import java.util.concurrent.TimeUnit
 
@@ -16,7 +16,7 @@ object Experiment
 {
   def main(args: Array[String]) =
   {
-    this.test1
+    this.test2
   }
   
   def test1() =
@@ -30,6 +30,7 @@ object Experiment
 	    chunkSize = 100000,
 	    workerLoad = 1000,
 	    goal = 10,
+	    //goal = -1,
 	    timeLimit = 1,
 	    leadingZeroes= 5)
 	    
@@ -98,8 +99,7 @@ class Client() extends Actor
         "time",
         context.dispatcher,
         null)*/
-    context.system.scheduler.scheduleOnce(FiniteDuration.apply(5, "second"))(() => self ! "time")(context.system.dispatcher)
-    //if(timeLimit >= 0) context.system.scheduler.scheduleOnce(FiniteDuration.apply(timeLimit, "minute"))(() => self ! PoisonPill)(context.system.dispatcher)
+    context.system.scheduler.scheduleOnce(5.second)(println("IM THE SCHEDULER"))(context.system.dispatcher)
   }
   
   def receive = 
