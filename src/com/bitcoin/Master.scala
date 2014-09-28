@@ -15,7 +15,7 @@ import javax.xml.bind.DatatypeConverter
  * from the SuperMaster. This relationship is similar to a server-client 
  * relationship where the Master is a client and the SuperMaster is the server.
  */
-class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().availableProcessors(), path:String)(implicit m: Manifest[T]) extends BitcoinActor
+class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().availableProcessors(), path:String) extends BitcoinActor
 {
   var superMaster:ActorSelection = null
   var workers:ActorRef = null
@@ -51,8 +51,8 @@ class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().ava
     case InitialSetup(leadingZeroes, prefix) => 
       {
         log.debug(s"%s received InitialSetup($leadingZeroes, $prefix) from %s.".format(self.path, sender.path))
-        log.debug("%s creating %s".format(self.path, m.runtimeClass))
-        workers = context.actorOf(Props(m.runtimeClass, leadingZeroes, prefix).withRouter(SmallestMailboxPool(workerCount)), name = "workerRouter")
+        log.debug("%s creating %s".format(self.path, implicitly[ClassTag[T]].runtimeClass))
+        workers = context.actorOf(Props(implicitly[ClassTag[T]].runtimeClass, leadingZeroes, prefix).withRouter(SmallestMailboxPool(workerCount)), name = "workerRouter")
         superMaster ! Ready
       }
     case _ => // Do nothing for now

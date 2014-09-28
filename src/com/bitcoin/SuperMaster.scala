@@ -19,8 +19,8 @@ class SuperMaster(start:Int = 0,
     goal:Int = 10,
     timeLimit:Long = 60) extends BitcoinActor
 {
-  var work:Int = start
-  var found = 0
+  private var work:Int = start
+  private var found = 0
   
   override def preStart() =
   {
@@ -48,7 +48,6 @@ class SuperMaster(start:Int = 0,
       {
         found += 1
         log.info("%s received Result(%s, %s) from %s".format(self.path, coin, hash, sender.path))
-        //println(s"Coin found: $scoin, $shash. Remaining: %s".format((goal - found).toString))
         println("Coin found: %s, %s. Remaining: %s".format(coin, hash, (goal - found).toString))
         if(found >= (goal - 1) && goal >= 0) context.system.shutdown
       }
