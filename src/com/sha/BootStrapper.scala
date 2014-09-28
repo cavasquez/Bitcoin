@@ -43,7 +43,6 @@ object BootStrapper extends App
     val workerCount = Runtime.getRuntime().availableProcessors()
     val path = "akka.tcp://bitcoinsystem@%s/user/super".format(config.masterLocation )
     val ct = ClassTag(classOf[Sha256Miner])
-    val m = manifest[Sha256Miner]
     println(classOf[Master[Sha256Miner]].getConstructors()(0))
     master = sys.actorOf(Props(classOf[Master[Sha256Miner]], workerCount, path, ct), name = "master")
     println("done")
