@@ -25,7 +25,7 @@ class Master[T <: Worker : ClassTag](workerCount: Int = Runtime.getRuntime().ava
   var superMaster:ActorSelection = null
   var workers:ActorRef = null
   var workLeft = 0
-  val workCoefficient = 5
+  val workCoefficient = 100
   
   override def preStart = 
   {
